@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xl-8 mx-auto">
+                
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="mb-4 text-center">Create New Staff</h1>
+                        <form method="post" action="" class="row g-3">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label for="id_department" class="form-label">Department</label>
+                                {{ form.department }}
+                            </div>
+                            <div class="col-12">
+                                <label for="id_first_name" class="form-label">First Name</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-12">
+                                <label for="id_last_name" class="form-label">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                            <div class="col-12">
+                                <label for="id_email" class="form-label">Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-12 mt-4">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

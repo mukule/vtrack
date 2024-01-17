@@ -1,0 +1,120 @@
+<!doctype html>
+{% load static %}
+<html lang="en" class="semi-dark">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--favicon-->
+    <link rel="shortcut icon" href="{% static 'main/images/logo-icon.jpg' %}" type="image/jpg">
+	<!--plugins-->
+    <link rel="stylesheet" href="{% static 'main/plugins/simplebar/css/simplbar.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'main/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'main/plugins/metismenu/css/metisMenu.min.css' %}" type="text/css">
+	<!-- loader-->
+    <link rel="stylesheet" href="{% static 'main/css/pace.min.css' %}" type="text/css">
+	<script src="{% static 'main/css/pace.min.js' %}"></script>
+	<!-- Bootstrap CSS -->
+	<link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/bootstrap-extended.css' %}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="{% static 'main/css/app.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/icons.css' %}" rel="stylesheet">
+	<title>CRVWWDA-Visitors Registration System</title>
+</head>
+
+<body class="bg-login">
+	<!--wrapper-->
+	<div class="wrapper">
+		<div class="section-authentication-signin d-flex align-items-center justify-content-center my-5 my-lg-0">
+			<div class="container">
+				<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
+					<div class="col mx-auto">
+						<div class="card mb-0">
+							<div class="card-body">
+								<div class="p-4">
+									<div class="mb-3 text-center">
+										<img src="{% static 'main/images/logo-icon.jpg' %}" width="60" alt="CRVWWDA logo" />
+									</div>
+									<div class="text-center mb-4">
+										<h5 class="">CRVWWDA Staff Login</h5>
+										<p class="mb-0">Please log in to your account</p>
+									</div>
+									<div class="form-body">
+										<div class="form-body">
+											<div class="row g-3">
+												<form action="" method="POST">
+													{% csrf_token %}
+													<div class="col-12">
+														<label for="inputEmailAddress" class="form-label">Staff No./Email</label>
+															{{ form.username }}
+														
+													</div>
+													<label for="inputChoosePassword" class="form-label">Password</label>
+														<div class="input-group" id="show_hide_password">
+															{{ form.password }}
+															<a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
+														</div>
+													
+													
+													
+												   
+													<!-- <input type="hidden" name="next" value="{{ request.GET.next }}"/> -->
+												
+													<div class="col-12 mt-4">
+														<div class="d-grid">
+															<button type="submit" class="btn btn-primary">Sign in</button>
+														</div>
+													</div>
+
+													<div class="login-separater text-center mb-5"> <span><a href="auth-basic-forgot-password.html">Forgot Password ?</a></span>
+														<hr/>
+													</div>
+												  </form>
+											</div>
+										</div>
+									</div>
+									
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--end row-->
+			</div>
+		</div>
+	</div>
+	<!--end wrapper-->
+	<!-- Bootstrap JS -->
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+	
+	<!--plugins-->
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!--Password show & hide js -->
+	<script>
+		$(document).ready(function () {
+			$("#show_hide_password a").on('click', function (event) {
+				event.preventDefault();
+				if ($('#show_hide_password input').attr("type") == "text") {
+					$('#show_hide_password input').attr('type', 'password');
+					$('#show_hide_password i').addClass("bx-hide");
+					$('#show_hide_password i').removeClass("bx-show");
+				} else if ($('#show_hide_password input').attr("type") == "password") {
+					$('#show_hide_password input').attr('type', 'text');
+					$('#show_hide_password i').removeClass("bx-hide");
+					$('#show_hide_password i').addClass("bx-show");
+				}
+			});
+		});
+	</script>
+	<!--app JS-->
+	<script src="assets/js/app.js"></script>
+</body>
+
+</html>

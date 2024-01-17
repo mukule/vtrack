@@ -1,0 +1,75 @@
+
+
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--favicon-->
+    <link rel="shortcut icon" href="{% static 'main/images/logo-icon.jpg' %}" type="image/jpg">
+	<!--plugins-->
+    <link rel="stylesheet" href="{% static 'main/plugins/simplebar/css/simplbar.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'main/plugins/perfect-scrollbar/css/perfect-scrollbar.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'main/plugins/metismenu/css/metisMenu.min.css' %}" type="text/css">
+	<!-- loader-->
+    <link rel="stylesheet" href="{% static 'main/css/pace.min.css' %}" type="text/css">
+	<script src="{% static 'main/css/pace.min.js' %}"></script>
+	<!-- Bootstrap CSS -->
+	<link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/bootstrap-extended.css' %}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="{% static 'main/css/app.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/icons.css' %}" rel="stylesheet">
+
+    <!-- Theme Style CSS -->
+	<link rel="stylesheet" href="{% static 'main/css/dark-theme.css' %}" />
+	<link rel="stylesheet" href="{% static 'main/css/semi-dark.css' %}" />
+	<link rel="stylesheet" href="{% static 'main/css/header-colors.css' %}" />
+
+	<title>CRVWWDA-Visitors Registration System</title>
+</head>
+
+<body>
+	
+        {% include 'main/includes/navbar.html' %}
+       
+                    {% include '../main/includes/messaging.html' %}
+                    {% block content %}
+                    {% endblock %}
+                    {% include 'main/includes/footer.html' %}
+     
+	
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+	<!--plugins-->
+    <script src="{% static 'main/js/jquery.min.js' %}"></script>
+	
+	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<script src="assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="assets/plugins/chartjs/js/chart.js"></script>
+	<script src="assets/plugins/sparkline-charts/jquery.sparkline.min.js"></script>
+	<script src="assets/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="assets/plugins/jquery-knob/excanvas.js"></script>
+	<script src="assets/plugins/jquery-knob/jquery.knob.js"></script>
+	<script>
+		  $(function() {
+			  $(".knob").knob();
+		  });
+	</script>
+	<script src="assets/js/index.js"></script>
+	<!--app JS-->
+	<script src="assets/js/app.js"></script>
+	<script>
+		new PerfectScrollbar(".app-container")
+	</script>
+
+	
+
+</body>
+
+</html>

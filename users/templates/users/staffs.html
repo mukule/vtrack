@@ -1,0 +1,58 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xl-8 mx-auto">
+                
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="mb-4 text-center">Staffs</h1>
+                        <h6 class="mb-0 text-uppercase">All Staffs</h6>
+                        <hr />
+                        <div class="card">
+                            <div class="card-body">
+                               {% if staffs %}
+                               <table class="table mb-0 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Department</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for staff in staffs %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ staff.first_name }}</td>
+                                        <td>{{ staff.last_name }}</td>
+                                        <td>{{ staff.email }}</td>
+                                        <td>{{ staff.department.name }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <h6 class="mb-0 text-uppercase">No Staffs available</h6>
+                            {% endif %}
+                            <div class="col-12 mt-4 text-center">
+                                <div class="d-grid">
+                                    <a href="{% url 'users:create_staff' %}" class="btn btn-primary">Add New Staff</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

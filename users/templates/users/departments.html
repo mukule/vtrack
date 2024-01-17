@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xl-8 mx-auto">
+                
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="mb-4 text-center">Departments</h1>
+                        <h6 class="mb-0 text-uppercase">All departments</h6>
+                        <hr />
+                        <div class="card">
+                            <div class="card-body">
+                               {% if departments %}
+                               <table class="table mb-0 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for department in departments %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ department.name }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <h6 class="mb-0 text-uppercase">No Deparments available </h6>
+                            {% endif %}
+                            <div class="col-12 mt-4 text-center">
+                                <div class="d-grid">
+                                    <a href="{% url 'users:create_department' %}" class="btn btn-primary">Add New Department</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

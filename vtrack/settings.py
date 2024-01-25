@@ -140,8 +140,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SMS_PROVIDER_API_ENDPOINT = 'https://restapi.uwaziimobile.com/desc'
-SMS_PROVIDER_API_TOKEN = '9Crqa5EVRzYjedmFXOZ5gdKsHRZV4l'
+SMS_PROVIDER_API_TOKEN = ''
 SMS_PROVIDER_SENDER_ID = 'Uwazii'
 
-CLIENT_ID = 'qzuRm3UxXShEGUm2OHyFgHzkN1vTkG3kIVGN2z9TEBQ='
-SECRET_ID = '36f74f2b-0911-47a5-a61b-20bae94dd3f1gK2G2cWfmWFsjuF5oL8+woPUyD2AbJWx24YGjRi0Jm8='
+CLIENT_ID = ''
+SECRET_ID = ''

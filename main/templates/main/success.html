@@ -3,21 +3,27 @@
 {% load static %}
 
 {% block content %}
-<div class="error-404 d-flex align-items-center justify-content-center">
-    <div class="container">
-        <div class="card py-5 text-center">
-            <div class="row g-0">
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex align-items-center justify-content-center">
-                    <div class="card-body p-4 text-center">
-                        <h1 class="display-1"><i class='bx bx-check'></i></h1>
-                        <h2 class="font-weight-bold display-4">Success</h2>
-                       
-                       
+<div class="page-wrapper">
+    <div class="error-404 d-flex align-items-center justify-content-center">
+        <div class="card shadow radius-10">
+            <div class="card-body text-center">
+                <div class="widgets-icons rounded-circle mx-auto bg-success text-white mb-3">
+                    <i class='bx bx-check display-4'></i>
+                </div>
+                
+                <h1 class="display-4 text-success">Welcome</h1>
+                <h1>{{visitor.full_name}}</h1>
+                <div class="row">
+                    <div class="col-12 col-lg-12 mx-auto">
+                        <h4 class="mt-3">Visitor Number : {{visitor.tag.tag_number|stringformat:"03d"}}</h4>
+                        <p class="text-info">Visitor card Number  {{visitor.tag.tag_number|stringformat:"03d"}} Activated Succesfully <br/> Please Give this Card to the Visitor.</p>
+                        
+
                     </div>
                 </div>
             </div>
-            <!--end row-->
         </div>
     </div>
 </div>
+
 {% endblock content %}

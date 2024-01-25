@@ -3,38 +3,36 @@
 {% load static %}
 
 {% block content %}
-<div class="error-404 d-flex align-items-center justify-content-center mt-4">
-    <div class="container">
-       
-            <div class="row g-0">
-                <!-- Walk-in Card -->
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex align-items-center justify-content-center">
-                  <div class="card shadow-sm">
-                    <a href="{% url 'main:index' %}">
+<div class="page-wrapper">
+    <div class="error-404 d-flex align-items-center justify-content-center">
+        <div class="row">
+            <div class="col-md-6 d-flex">
+                <div class="card shadow radius-10 mb-4 flex-fill w-100">
+                    <div class="card-body text-center">
+                      <a href="{% url 'main:index' %}">
                         <div class="card-body p-5 text-center">
-                            <h1 class="display-1"><i class='bx bx-walk'></i></h1>
-                            <h2 class="font-weight-bold display-4">Walk-In</h2>
-    
+                            <h1 class="display-1"><i class='bx bx-walk text-primary'></i></h1>
+                            <button type="button" class="btn btn-outline-success px-5 radius-30">Walk-in</button>
                         </div>
                        </a>
-                  </div>
-                </div>
-
-                <!-- Drive-in Card -->
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex align-items-center justify-content-center">
-                  <div class="card shadow-sm">
-                    <a href="{% url 'main:drivein' %}">
-                        <div class="card-body p-5 text-center">
-                            <h1 class="display-1"><i class='bx bx-car'></i></h1>
-                            <h2 class="font-weight-bold display-4">Drive-In</h2>
-                           
-                        </div>
-                       </a>
-                  </div>
+                    </div>
                 </div>
             </div>
-            <!--end row-->
-       
+            
+            <div class="col-md-6 d-flex">
+              <div class="card shadow radius-10 mb-4 flex-fill w-100">
+                  <div class="card-body text-center">
+                      <a href="{% url 'main:drivein' %}">
+                          <div class="card-body p-5 text-center">
+                              <h1 class="display-1"><i class='bx bx-car text-primary'></i></h1>
+                              <button type="button" class="btn btn-outline-success px-5 radius-30">Drive-in</button>
+                          </div>
+                      </a>
+                  </div>
+              </div>
+          </div>
+          
+        </div>
     </div>
 </div>
 

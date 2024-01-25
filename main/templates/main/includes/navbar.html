@@ -17,38 +17,10 @@
                   <div class="top-menu ms-auto">
                     <ul class="navbar-nav align-items-center gap-1">
                         <li class="nav-item dropdown dropdown-large">
-                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown"><span class="alert-count">7</span>
+                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown"><span class="alert-count">{{visitors_count}}</span>
                                 <i class='bx bx-bell'></i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a href="javascript:;">
-                                    <div class="msg-header">
-                                        <p class="msg-header-title">Notifications</p>
-                                        <p class="msg-header-badge">8 New</p>
-                                    </div>
-                                </a>
-                                <div class="header-notifications-list">
-                                    
-                                
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <div class="d-flex align-items-center">
-                                            <div class="user-online">
-                                                <img src="assets/images/avatars/avatar-8.png" class="msg-avatar" alt="user avatar">
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h6 class="msg-name">Peter Costanzo <span class="msg-time float-end">6 hrs
-                                            ago</span></h6>
-                                                <p class="msg-info">It was popularised in the 1960s</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <a href="javascript:;">
-                                    <div class="text-center msg-footer">
-                                        <button class="btn btn-primary w-100">View All Notifications</button>
-                                    </div>
-                                </a>
-                            </div>
+                           
                         </li>
                         
                     </ul>
@@ -105,12 +77,6 @@
                 <div class="offcanvas-body">
                   <ul class="navbar-nav align-items-center flex-grow-1">
                     <li class="nav-item">
-                        <!-- <a class="nav-link" href="{% url 'main:index' %}">
-                            <div class="parent-icon"><i class='bx bx-home-alt'></i>
-                            </div>
-                            <div class="menu-title d-flex align-items-center">Home</div>
-                            
-                        </a> -->
                         <a class="nav-link" href="{% url 'main:checkin' %}">
                             <div class="parent-icon"><i class='bx bx-home-alt'></i>
                             </div>
@@ -126,8 +92,8 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="{% url 'main:checkouts' %}">
-                            <div class="menu-title d-flex align-items-center">Checkouts</div>
+                        <a class="nav-link" href="{% url 'main:checkins' %}">
+                            <div class="menu-title d-flex align-items-center">Checkout</div>
                         </a>
                       </li>
                       <li class="nav-item">
@@ -143,6 +109,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'main:tags' %}">
                             <div class="menu-title d-flex align-items-center">Visitors Tags</div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:v_history' %}">
+                            <div class="menu-title d-flex align-items-center">Visitors History</div>
                         </a>
                     </li>
                     

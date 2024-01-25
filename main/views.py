@@ -116,8 +116,11 @@ def dashboard(request):
             visitor = form.save(commit=False)
             visitor.otp = otp  # Assign the generated OTP to the visitor
             print('Assigned otp:', visitor.otp)
+            phone_number = str(visitor.phone)[-9:]
 
             visitor.save()
+            # send_sms(visitor.otp, phone_number)
+
 
             return redirect('main:verify', visitor_id=visitor.id)
         else:
@@ -163,8 +166,10 @@ def drivein(request):
             visitor = form.save(commit=False)
             visitor.otp = otp  # Assign the generated OTP to the visitor
             print('Assigned otp:', visitor.otp)
+            phone_number = str(visitor.phone)[-9:]
 
             visitor.save()
+            send_sms(visitor.otp, phone_number)
 
             return redirect('main:verify', visitor_id=visitor.id)
         else:
@@ -239,6 +244,7 @@ def verify(request, visitor_id):
 
                             visitor.verified = True  # Mark the visitor as verified
                             visitor.save()
+                            
 
                             messages.success(
                                 request, "OTP verification successful. Visitor verified.")
@@ -308,18 +314,26 @@ def proceed(request, visitor_id):
     messages.error(request, "Unable to proceed without allocating a tag.")
     return redirect('main:fail', visitor_id=visitor.id)
 
-
 def checkins(request):
+    # Get the current date
+    current_date = timezone.now().date()
+
+    # Filter visitors for the current day
+    visitors = Visitor.objects.filter(created_at__date=current_date).order_by('-created_at')
+
+    context = {'visitors': visitors}
+
+    return render(request, 'main/checkins.html', context)
+
+
+
+def v_history(request):
     visitors = Visitor.objects.all().order_by('-created_at')
 
     context = {'visitors': visitors}
 
-    # Send a test SMS when the checkins view is accessed
-    code = 8080
-    phone_number = '704122212'
-    # send_sms(code, phone_number)
+    return render(request, 'main/v_history.html', context)
 
-    return render(request, 'main/checkins.html', context)
 
 
 def checkin(request):

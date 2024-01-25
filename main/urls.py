@@ -16,5 +16,6 @@ urlpatterns = [
     path('checkout_visitor/<int:visitor_id>/',
          views.checkout_visitor, name='checkout_visitor'),
     path('proceed/<int:visitor_id>/', views.proceed, name='proceed'),
+     path('v_history/', views.v_history, name='v_history'),
 
 ]

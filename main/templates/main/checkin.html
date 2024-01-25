@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="error-404 d-flex align-items-center justify-content-center mt-4">
+    <div class="container">
+       
+            <div class="row g-0">
+                <!-- Walk-in Card -->
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex align-items-center justify-content-center">
+                  <div class="card shadow-sm">
+                    <a href="{% url 'main:index' %}">
+                        <div class="card-body p-5 text-center">
+                            <h1 class="display-1"><i class='bx bx-walk'></i></h1>
+                            <h2 class="font-weight-bold display-4">Walk-In</h2>
+    
+                        </div>
+                       </a>
+                  </div>
+                </div>
+
+                <!-- Drive-in Card -->
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5 mx-auto d-flex align-items-center justify-content-center">
+                  <div class="card shadow-sm">
+                    <a href="{% url 'main:drivein' %}">
+                        <div class="card-body p-5 text-center">
+                            <h1 class="display-1"><i class='bx bx-car'></i></h1>
+                            <h2 class="font-weight-bold display-4">Drive-In</h2>
+                           
+                        </div>
+                       </a>
+                  </div>
+                </div>
+            </div>
+            <!--end row-->
+       
+    </div>
+</div>
+
+{% endblock content %}

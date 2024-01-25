@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xl-8 mx-auto">
+                
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="mb-4 text-center">Update Visitors Tag Number</h1>
+                        <form action="" method="POST" class="row g-3">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label for="inputFullName" class="form-label">Last Card Number</label>
+                                {{ form.tag_number }}
+                            </div>
+                            
+                           
+                            <div class="col-12 mt-4">
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock content %}

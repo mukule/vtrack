@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xl-12 mx-auto">
+                
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="mb-4 text-center">Visitors Tag Numbers</h1>
+                       
+                        <hr />
+                        
+                        {% if tags %}
+                            <div class="row row-cols-1 row-cols-md-3 row-cols-xl-5">
+                                {% for tag in tags %}
+                                <div class="col">
+                                    <div class="card radius-10">
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <h4 class="my-1">{{ tag.tag_number|stringformat:"03d" }}</h4>
+                                                <p class="mb-0 text-secondary">
+                                                    {% if tag.is_active %}
+                                                        Active
+                                                    {% else %}
+                                                        Inactive
+                                                    {% endif %}
+                                                </p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-center">No tag numbers available.</p>
+                        {% endif %}
+                        
+                        <div class="text-center mt-4">
+                            <a href="{% url 'users:add_tags' %}" class="btn btn-primary">Update Tags</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

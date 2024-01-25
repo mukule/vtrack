@@ -36,7 +36,7 @@
 	
         {% include 'main/includes/navbar.html' %}
        
-                    {% include '../main/includes/messaging.html' %}
+                    {% include 'main/includes/messaging.html' %}
                     {% block content %}
                     {% endblock %}
                     {% include 'main/includes/footer.html' %}
@@ -46,24 +46,51 @@
 	<!--plugins-->
     <script src="{% static 'main/js/jquery.min.js' %}"></script>
 	
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<script src="assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
-    <script src="assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
-	<script src="assets/plugins/chartjs/js/chart.js"></script>
-	<script src="assets/plugins/sparkline-charts/jquery.sparkline.min.js"></script>
-	<script src="assets/plugins/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
-	<script src="assets/plugins/jquery-knob/excanvas.js"></script>
-	<script src="assets/plugins/jquery-knob/jquery.knob.js"></script>
-	<script>
-		  $(function() {
-			  $(".knob").knob();
-		  });
-	</script>
-	<script src="assets/js/index.js"></script>
-	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('DOMContentLoaded event fired');
+
+        const departmentSelect = document.getElementById('department');
+        const hostSelect = document.getElementById('host');
+        const staffData = {{ staff_by_department|safe }};
+        let staffForSelectedDepartment = [];
+
+        if (!departmentSelect || !hostSelect) {
+            console.error('Could not find the department or host element.');
+            return;
+        }
+
+        departmentSelect.addEventListener('change', function () {
+            const selectedDepartment = departmentSelect.value;
+            console.log('Selected department:', selectedDepartment);
+
+            // Retrieve staff for the selected department from the pre-loaded data
+            staffForSelectedDepartment = staffData[selectedDepartment];
+
+            // Log the raw JSON data before parsing
+            console.log('Raw Staff Data JSON:', staffForSelectedDepartment);
+
+            // Clear existing options for staff
+            hostSelect.innerHTML = '<option value="">Choose Host</option>';
+
+            staffForSelectedDepartment.forEach(staff => {
+                const option = document.createElement('option');
+                option.value = staff.id; 
+                option.textContent = `${staff.first_name} ${staff.last_name}`;
+                hostSelect.appendChild(option);
+            });
+
+            // Optionally, trigger a change event on the hostSelect element
+            const event = new Event('change');
+            hostSelect.dispatchEvent(event);
+        });
+
+        hostSelect.addEventListener('change', function () {
+            const selectedHostId = hostSelect.value;
+            console.log('Selected Host ID:', selectedHostId);
+        });
+    });
+</script>
 	<script>
 		new PerfectScrollbar(".app-container")
 	</script>

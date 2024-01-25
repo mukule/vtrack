@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xl-8 mx-auto">
+              
+                
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="mb-4 text-center">Visitor Verification by SMS</h1>
+
+                        {% if error_messages %}
+                        <div class="alert alert-danger alert-dismissible text-center" role="alert">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            {% for message in error_messages %}
+                            {{ message|safe }}
+                            <br>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <form action="" method="POST" class="row g-3">
+                            {% csrf_token %}
+                            <div class="col-12">
+                                <label for="inputFullName" class="form-label">OTP Received</label>
+                                {{ form.otp }}
+                                <!-- Display errors for the 'otp' field -->
+                                {% for error in form.otp.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                           
+                            <div class="col-12 mt-4 text-center">
+                                <div class="d-grid mb-4">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                                <a href="{% url 'main:proceed' visitor_id=visitor.id %}" class="btn btn-warning">
+                                    Proceed Unverified
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

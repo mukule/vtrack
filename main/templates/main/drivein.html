@@ -11,9 +11,13 @@
                 <div class="card">
                     <div class="card-body p-4">
                         <h1 class="mb-4 text-center">Visitor Registraion</h1>
-                        <h4 class="mb-4 text-center">Walkins</h4>
+                        <h4 class="mb-4 text-center">Drive-Ins</h4>
                         <form action="" method="POST" class="row g-3">
                             {% csrf_token %}
+                            <div class="col-12">
+                                <label for="inputFullName" class="form-label">Number Plate</label>
+                                {{ form.number_plate }}
+                            </div>
                             <div class="col-12">
                                 <label for="inputFullName" class="form-label">Full Name</label>
                                 {{ form.full_name }}

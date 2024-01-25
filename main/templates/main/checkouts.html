@@ -10,8 +10,8 @@
                 
                 <div class="card">
                     <div class="card-body p-4">
-                        <h1 class="mb-4 text-center">Checkins</h1>
-                        <h6 class="mb-0 text-uppercase">Visitors</h6>
+                        <h1 class="mb-4 text-center">Checouts</h1>
+                        <h6 class="mb-0 text-uppercase text-center">Visitors</h6>
                         <hr />
                      
                           
@@ -22,14 +22,15 @@
                                         <th scope="col">#</th>
                                         <th scope="col">Full Name</th>
                                         <th scope="col">Modes</th>
-                                        <th scope="col">Contacts</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Company</th>
                                         <th scope="col">Purpose</th>
                                         <th scope="col">Host</th>
+                                        <th scope="col">Department</th>
                                         <th scope="col">Checkin Time</th>
-                                        <th scope="col">Verrification</th>
                                         <th scope="col">Tag No.</th>
                                         <th scope="col">Status</th>
-                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -44,29 +45,13 @@
                                             <p>Walk-In</p>
                                             {%endif%}
                                         </td>
-                                        <td>{{visitor.company}}<br/>{{ visitor.phone }}<br/>
-                                            {{ visitor.email }}
-
-                                        </td>
+                                        <td>{{ visitor.phone }}</td>
+                                        <td>{{ visitor.email }}</td>
+                                        <td>{{ visitor.company }}</td>
                                         <td>{{ visitor.purpose_of_visit }}</td>
-                                        <td>
-                                            {{ visitor.host.first_name }} {{ visitor.host.last_name }}<br/>
-                                            {{ visitor.department.name }}
-                                        </td>
-                                        <td>{{ visitor.created_at }}
-                                           {% if visitor.checked_out_at %}
-                                           <p class="text-warning">
-                                               {{ visitor.checked_out_at }} 
-                                           </p>
-                                           {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if visitor.verified %}
-                                            Passed
-                                            {%else%}
-                                            <p class="text-warning"> Failed</p>
-                                            {%endif%}
-                                        </td>
+                                        <td>{{ visitor.host.first_name }} {{ visitor.host.last_name }}</td>
+                                        <td>{{ visitor.department.name }}</td>
+                                        <td>{{ visitor.created_at }}</td>
                                         <td>
                                             {% if visitor.tag.tag_number %}
                                             {{ visitor.tag.tag_number|stringformat:"03d" }}
@@ -87,18 +72,6 @@
                                                 </button>
                                             </div>
                                             {%endif%}
-                                        </td>
-                                        <td>
-                                           {% if visitor.tag.is_active %}
-                                          <p>
-                                            <div class="col">
-                                                <a href="{% url 'main:checkout_visitor' visitor_id=visitor.id %}" class="btn btn-danger">
-                                                    Checkout
-                                                </a>
-                                                </button>
-                                            </div>
-                                          </p>
-                                        {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}

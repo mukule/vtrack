@@ -20,14 +20,14 @@ def index(request):
 
         else:
             for error in list(form.errors.values()):
-                messages.error(request, error) 
+                messages.error(request, error)
 
     form = UserLoginForm()
 
     return render(
-        request,"users/index.html",
+        request, "users/index.html",
         context={"form": form}
-        )
+    )
 
 
 @access_right
@@ -47,9 +47,9 @@ def register(request):
     else:
         form = UserRegisterForm()
 
-    return render(request,"main/index.html",
-        context={"form": form}
-        )
+    return render(request, "main/index.html",
+                  context={"form": form}
+                  )
 
 
 @login_required
@@ -64,9 +64,11 @@ def v_reg(request):
 
     return render(request, 'users/v_reg.html', {'form': form})
 
+
 def success(request, visitor_id):
     visitor = Visitor.objects.get(pk=visitor_id)
     return render(request, 'users/success.html', {'visitor': visitor})
+
 
 def create_department(request):
     if request.method == 'POST':
@@ -79,6 +81,7 @@ def create_department(request):
 
     return render(request, 'users/create_department.html', {'form': form})
 
+
 def departments(request):
     departments = Department.objects.all()
     context = {
@@ -86,16 +89,18 @@ def departments(request):
     }
     return render(request, 'users/departments.html', context)
 
+
 def create_staff(request):
     if request.method == 'POST':
         form = StaffForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('users:staffs') 
+            return redirect('users:staffs')
     else:
         form = StaffForm()
 
     return render(request, 'users/create_staff.html', {'form': form})
+
 
 def staffs(request):
     staffs = Staff.objects.all()
@@ -103,3 +108,35 @@ def staffs(request):
         'staffs': staffs
     }
     return render(request, 'users/staffs.html', context)
+
+
+def add_visitor_tag(request):
+    if request.method == 'POST':
+        form = VisitorTagForm(request.POST)
+        if form.is_valid():
+            last_number = form.cleaned_data['tag_number']
+
+            # Ensure last_number is at least 1
+            last_number = max(1, last_number)
+
+            existing_tags = set(
+                VisitorTag.objects.values_list('tag_number', flat=True))
+            existing_tags_to_update = existing_tags.intersection(
+                range(1, last_number + 1))
+
+            # Update existing tags if necessary
+            for tag_number in existing_tags_to_update:
+                tag = VisitorTag.objects.get(tag_number=tag_number)
+                tag.save()
+
+            # Create missing tags
+            missing_tags = set(range(1, last_number + 1)) - existing_tags
+            for tag_number in missing_tags:
+                VisitorTag.objects.create(tag_number=tag_number)
+
+            # Redirect to a success page after saving
+            return redirect('main:tags')
+    else:
+        form = VisitorTagForm()
+
+    return render(request, 'users/update_tags.html', {'form': form})

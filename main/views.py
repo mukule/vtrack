@@ -15,6 +15,9 @@ from django.core.cache import cache
 import random
 from django.contrib import messages
 from django.http import HttpResponse
+from datetime import datetime
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 
 def generate_otp():
@@ -95,6 +98,7 @@ def update_unused_tags():
 
 @login_required
 def dashboard(request):
+    time = datetime.now().date()
     update_unused_tags()
     otp = generate_otp()
     print('The otp is: ', otp)
@@ -119,8 +123,11 @@ def dashboard(request):
             phone_number = str(visitor.phone)[-9:]
 
             visitor.save()
-            # send_sms(visitor.otp, phone_number)
-
+            try:
+                send_sms(visitor.otp, phone_number)
+            except Exception as e:
+               
+                print(f"Failed to send SMS: {e}")
 
             return redirect('main:verify', visitor_id=visitor.id)
         else:
@@ -140,11 +147,13 @@ def dashboard(request):
         'departments': departments,
         'staff_by_department': staff_by_department_json,
         'department_with_staffs': department_with_staffs,
+        'time': time,
     }
     return render(request, 'main/index.html', context)
 
 
 def drivein(request):
+    time = datetime.now().date()
     update_unused_tags()
     otp = generate_otp()
     print('The otp is: ', otp)
@@ -169,7 +178,11 @@ def drivein(request):
             phone_number = str(visitor.phone)[-9:]
 
             visitor.save()
-            send_sms(visitor.otp, phone_number)
+            try:
+                send_sms(visitor.otp, phone_number)
+            except Exception as e:
+               
+                print(f"Failed to send SMS: {e}")
 
             return redirect('main:verify', visitor_id=visitor.id)
         else:
@@ -189,9 +202,33 @@ def drivein(request):
         'departments': departments,
         'staff_by_department': staff_by_department_json,
         'department_with_staffs': department_with_staffs,
+        'time':time,
     }
     return render(request, 'main/drivein.html', context)
 
+def generate_email_subject(visitor):
+    return f"New Visitor Notification: {visitor.full_name}"
+
+def generate_email_body(visitor):
+    return render_to_string('main/visitor_notification.html', {'visitor': visitor})
+
+def send_visitor_notification_email(visitor):
+    # Use your configured sender email address
+    sender_email = settings.EMAIL_FROM
+
+    # Assuming the staff's email is stored in the host's model
+    host_email = visitor.host.email
+
+    # Admin email
+    admin_email = settings.ADMIN_EMAIL
+
+    # Generate email subject and body
+    subject = generate_email_subject(visitor)
+    body = generate_email_body(visitor)
+
+    # Send email with plain text content type and CC to admin email
+    recipient_list = [host_email, admin_email]
+    send_mail(subject, '', sender_email, recipient_list, fail_silently=False, html_message=body)
 
 def verify(request, visitor_id):
     try:
@@ -244,10 +281,13 @@ def verify(request, visitor_id):
 
                             visitor.verified = True  # Mark the visitor as verified
                             visitor.save()
-                            
+                            try:
+                                send_visitor_notification_email(visitor)
+                            except Exception as e:
+                               
+                                print(f"Failed to send email: {e}")
 
-                            messages.success(
-                                request, "OTP verification successful. Visitor verified.")
+                          
                             return redirect('main:success', visitor_id=visitor.id)
 
             print('Incorrect OTP!')
@@ -255,7 +295,7 @@ def verify(request, visitor_id):
                 "Incorrect OTP. Ask for the Correct OTP!!.")
         else:
             print('Form errors:', form.errors)
-            # Append form errors to the list of error messages
+           
             error_messages.extend(form.errors.get('__all__', []))
     else:
         form = VisitorVerificationForm()
@@ -263,7 +303,7 @@ def verify(request, visitor_id):
     context = {
         'form': form,
         'visitor': visitor,
-        'error_messages': error_messages,  # Pass error messages to the context
+        'error_messages': error_messages, 
     }
     return render(request, 'main/verify.html', context)
 
@@ -315,13 +355,14 @@ def proceed(request, visitor_id):
     return redirect('main:fail', visitor_id=visitor.id)
 
 def checkins(request):
+    time = datetime.now().date()
     # Get the current date
     current_date = timezone.now().date()
 
     # Filter visitors for the current day
     visitors = Visitor.objects.filter(created_at__date=current_date).order_by('-created_at')
 
-    context = {'visitors': visitors}
+    context = {'visitors': visitors, 'time': time}
 
     return render(request, 'main/checkins.html', context)
 

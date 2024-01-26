@@ -11,104 +11,105 @@
                 <div class="card">
                     <div class="card-body p-4">
                         <h1 class="mb-4 text-center">Checkins</h1>
-                        <h6 class="mb-0 text-uppercase">Visitors</h6>
+                        <div class="col text-center">
+                            <button type="button" class="btn btn-outline-info px-5 radius-30">{{time}} Visitors</button>
+                        </div>
                         <hr />
-                     
-                          
-                               {% if visitors %}
-                               <table class="table mb-0 table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Full Name</th>
-                                        <th scope="col">Modes</th>
-                                        <th scope="col">Contacts</th>
-                                        <th scope="col">Purpose</th>
-                                        <th scope="col">Host</th>
-                                        <th scope="col">Checkin Time</th>
-                                        <th scope="col">Verrification</th>
-                                        <th scope="col">Tag No.</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for visitor in visitors %}
-                                    <tr>
-                                        <th scope="row">{{ forloop.counter }}</th>
-                                        <td>{{ visitor.full_name }}</td>
-                                        <td>
-                                            {% if visitor.drive_in %}
-                                            <p>{{visitor.number_plate}}</p>
-                                            {%else%}
-                                            <p>Walk-In</p>
-                                            {%endif%}
-                                        </td>
-                                        <td>{{visitor.company}}<br/>{{ visitor.phone }}<br/>
-                                            {{ visitor.email }}
 
-                                        </td>
-                                        <td>{{ visitor.purpose_of_visit }}</td>
-                                        <td>
-                                            {{ visitor.host.first_name }} {{ visitor.host.last_name }}<br/>
-                                            {{ visitor.department.name }}
-                                        </td>
-                                        <td>{{ visitor.created_at }}
-                                           {% if visitor.checked_out_at %}
-                                           <p class="text-warning">
-                                               {{ visitor.checked_out_at }} 
-                                           </p>
-                                           {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if visitor.verified %}
-                                           <p class="text-success">Passed</p>
-                                            {%else%}
-                                            <p class="text-warning"> Failed</p>
-                                            {%endif%}
-                                        </td>
-                                        <td>
-                                            {% if visitor.tag.tag_number %}
-                                            {{ visitor.tag.tag_number|stringformat:"03d" }}
-                                            {%else%}
-                                            <p>Not Given</p>
-                                            {%endif%}
+                        <div class="table-responsive">
+                            {% if visitors %}
+                            <table class="table mb-0 table-hover">
+                             <thead>
+                                 <tr>
+                                     <th scope="col">#</th>
+                                     <th scope="col">Full Name</th>
+                                     <th scope="col">Modes</th>
+                                     <th scope="col">Contacts</th>
+                                     <th scope="col">Purpose</th>
+                                     <th scope="col">Host</th>
+                                     <th scope="col">Checkin Time</th>
+                                     <th scope="col">Verrification</th>
+                                     <th scope="col">Tag No.</th>
+                                     <th scope="col">Status</th>
+                                     <th scope="col">Action</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 {% for visitor in visitors %}
+                                 <tr>
+                                     <th scope="row">{{ forloop.counter }}</th>
+                                     <td>{{ visitor.full_name }}</td>
+                                     <td>
+                                         {% if visitor.drive_in %}
+                                         <p>{{visitor.number_plate}}</p>
+                                         {%else%}
+                                         <p>Walk-In</p>
+                                         {%endif%}
+                                     </td>
+                                     <td>{{visitor.company}}<br/>{{ visitor.phone }}<br/>
+                                         {{ visitor.email }}
 
-                                        </td>
-                                        <td>
-                                            {% if visitor.tag.is_active %}
-                                            <p> <div class="col">
-                                                <button type="button" class="btn btn-info">In
-                                                </button>
-                                            </div></p>
-                                            {%else%}
-                                            <div class="col">
-                                                <button type="button" class="btn btn-primary">Out
-                                                </button>
-                                            </div>
-                                            {%endif%}
-                                        </td>
-                                        <td>
-                                           {% if visitor.tag.is_active %}
-                                          <p>
-                                            <div class="col">
-                                                <a href="{% url 'main:checkout_visitor' visitor_id=visitor.id %}" class="btn btn-danger">
-                                                    Checkout
-                                                </a>
-                                                </button>
-                                            </div>
-                                          </p>
+                                     </td>
+                                     <td>{{ visitor.purpose_of_visit }}</td>
+                                     <td>
+                                         {{ visitor.host.first_name }} {{ visitor.host.last_name }}<br/>
+                                         {{ visitor.department.name }}
+                                     </td>
+                                     <td>{{ visitor.created_at }}
+                                        {% if visitor.checked_out_at %}
+                                        <p class="text-warning">
+                                            {{ visitor.checked_out_at }} 
+                                        </p>
                                         {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                            {% else %}
-                            <h6 class="mb-0 text-uppercase">No Visitors available</h6>
-                            {% endif %}
-                           
-                   
+                                     </td>
+                                     <td>
+                                         {% if visitor.verified %}
+                                        <p class="text-success">Passed</p>
+                                         {%else%}
+                                         <p class="text-warning"> Failed</p>
+                                         {%endif%}
+                                     </td>
+                                     <td>
+                                         {% if visitor.tag.tag_number %}
+                                         {{ visitor.tag.tag_number|stringformat:"03d" }}
+                                         {%else%}
+                                         <p>Not Given</p>
+                                         {%endif%}
+
+                                     </td>
+                                     <td>
+                                         {% if visitor.tag.is_active %}
+                                         <p> <div class="col">
+                                             <button type="button" class="btn btn-info">In
+                                             </button>
+                                         </div></p>
+                                         {%else%}
+                                         <div class="col">
+                                             <button type="button" class="btn btn-primary">Out
+                                             </button>
+                                         </div>
+                                         {%endif%}
+                                     </td>
+                                     <td>
+                                        {% if visitor.tag.is_active %}
+                                       <p>
+                                         <div class="col">
+                                             <a href="{% url 'main:checkout_visitor' visitor_id=visitor.id %}" class="btn btn-danger">
+                                                 Checkout
+                                             </a>
+                                             </button>
+                                         </div>
+                                       </p>
+                                     {% endif %}
+                                     </td>
+                                 </tr>
+                                 {% endfor %}
+                             </tbody>
+                         </table>
+                         {% else %}
+                         <h6 class="mb-0 text-uppercase">No Visitors available</h6>
+                         {% endif %}
+                        </div>
                        
                     </div>
                 </div>

@@ -12,6 +12,7 @@ urlpatterns = [
     path('create_staff/', views.create_staff, name='create_staff'),
     path('staffs/', views.staffs, name='staffs'),
     path('add_visitor_tag/', views.add_visitor_tag, name='add_tags'),
+    path('logout', views.custom_logout, name='logout'),
 
 
 ]

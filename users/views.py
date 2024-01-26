@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import *
 from main.decorators import *
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 
 def index(request):
@@ -50,6 +51,13 @@ def register(request):
     return render(request, "main/index.html",
                   context={"form": form}
                   )
+
+
+@login_required
+def custom_logout(request):
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect("/")
 
 
 @login_required

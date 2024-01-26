@@ -12,6 +12,9 @@
                     <div class="card-body p-4">
                         <h1 class="mb-4 text-center">Visitor Registraion</h1>
                         <h4 class="mb-4 text-center">Walkins</h4>
+                        <div class="col text-center">
+                            <button type="button" class="btn btn-outline-info px-5 radius-30">{{time}}</button>
+                        </div>
                         <form action="" method="POST" class="row g-3">
                             {% csrf_token %}
                             <div class="col-12">

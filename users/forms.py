@@ -102,14 +102,16 @@ class VisitorForm(forms.ModelForm):
             attrs={'placeholder': 'Phone', 'class': 'form-control'}),
         label='',
     )
-    purpose_of_visit = forms.CharField(
-        widget=forms.TextInput(
-            attrs={'placeholder': 'Purpose of Visit', 'class': 'form-control'}),
+    purpose_of_visit = forms.ModelChoiceField(
+        queryset=VisitingPurpose.objects.all(),
+        empty_label='Select the Purpose for the Visit',
+        widget=forms.Select(
+            attrs={'class': 'form-control', 'id': 'v-purpose'}),
         label='',
     )
     host = forms.ModelChoiceField(
         queryset=Staff.objects.all(),
-        empty_label='Choose Host',
+        empty_label='Select the Officer to be seen',
         widget=forms.Select(attrs={'class': 'form-control', 'id': 'host'}),
         label='',
     )
@@ -140,6 +142,8 @@ class VisitorForm(forms.ModelForm):
         label='',
         required=False,
     )
+
+    
 
 
 class DriveInVisitorForm(VisitorForm):
@@ -217,3 +221,49 @@ class VisitorVerificationForm(forms.Form):
         if not otp.isdigit() or len(otp) != 4:
             raise forms.ValidationError("OTP must be a 6-digit number.")
         return otp
+
+
+class VisitingPurposeForm(forms.ModelForm):
+    class Meta:
+        model = VisitingPurpose
+        fields = ['name']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Purpose Name'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class RatingOptionForm(forms.ModelForm):
+    class Meta:
+        model = RatingOption
+        fields = ['name']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Rating Option'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(RatingOptionForm, self).__init__(*args, **kwargs)
+
+
+
+
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ['rate', 'comments']
+
+    def __init__(self, *args, **kwargs):
+        super(RatingForm, self).__init__(*args, **kwargs)
+
+        # Override ModelChoiceField to exclude the empty choice
+        self.fields['rate'] = forms.ModelChoiceField(
+            queryset=RatingOption.objects.exclude(name__in=['', None]),
+            widget=forms.RadioSelect,
+            empty_label=None  # Set empty_label to None to exclude the empty choice
+        )
+
+        # Customize form widget attributes if needed
+        self.fields['comments'].widget.attrs.update({'class': 'form-control', 'rows': 3})

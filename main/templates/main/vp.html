@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-xl-8 mx-auto">
+                
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h1 class="mb-4 text-center">Visiting Purposes</h1>
+                        <hr />
+                       
+                               {% if vps %}
+                               <table class="table mb-0 table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for vp in vps %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ vp.name }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <h6 class="mb-0 text-uppercase">No Visiting Purposes Added </h6>
+                            {% endif %}
+                            <div class="col-12 mt-4 text-center">
+                                <div class="d-grid">
+                                    <a href="{% url 'main:create_vp' %}" class="btn btn-primary">Add New Visiting Purpose</a>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

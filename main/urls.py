@@ -16,6 +16,13 @@ urlpatterns = [
     path('checkout_visitor/<int:visitor_id>/',
          views.checkout_visitor, name='checkout_visitor'),
     path('proceed/<int:visitor_id>/', views.proceed, name='proceed'),
-     path('v_history/', views.v_history, name='v_history'),
+    path('v_history/', views.v_history, name='v_history'),
+    path('vp/', views.vp, name='vp'),
+    path('create_vp/', views.create_vp, name='create_vp'),
+    path('rate_visitor/<int:visitor_id>/', views.rate_visitor, name='rate_visitor'),
+     path('ro/', views.ro, name='ro'),
+    path('create_ro/', views.create_ro, name='create_ro'),
+    path('r_success/', views.r_success, name='r_success'),
+   
 
 ]

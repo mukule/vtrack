@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from users.models import *
 from users.forms import *
@@ -123,11 +124,11 @@ def dashboard(request):
             phone_number = str(visitor.phone)[-9:]
 
             visitor.save()
-            try:
-                send_sms(visitor.otp, phone_number)
-            except Exception as e:
+            # try:
+            #     send_sms(visitor.otp, phone_number)
+            # except Exception as e:
                
-                print(f"Failed to send SMS: {e}")
+            #     print(f"Failed to send SMS: {e}")
 
             return redirect('main:verify', visitor_id=visitor.id)
         else:
@@ -377,6 +378,8 @@ def v_history(request):
 
 
 
+
+
 def checkin(request):
     return render(request, 'main/checkin.html')
 
@@ -412,6 +415,7 @@ def checkouts(request):
     return render(request, 'main/checkouts.html', context)
 
 
+
 def checkout_visitor(request, visitor_id):
     # Retrieve the visitor by ID
     visitor = get_object_or_404(Visitor, id=visitor_id)
@@ -426,4 +430,77 @@ def checkout_visitor(request, visitor_id):
     visitor.checked_out_at = timezone.now()
     visitor.save()
 
+    # Get the feedback URL
+    feedback_url = request.build_absolute_uri(reverse('main:rate_visitor', kwargs={'visitor_id': visitor.id}))
+
+    # Print the feedback URL to the terminal
+    print(f"Feedback URL for Visitor {visitor.id}: {feedback_url}")
+
+    # Redirect to the check-ins page or any other desired URL
     return redirect('main:checkins')
+
+
+
+
+def create_vp(request):
+    if request.method == 'POST':
+        form = VisitingPurposeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('main:vp')
+    else:
+        form = VisitingPurposeForm()
+
+    return render(request, 'main/create_vp.html', {'form': form})
+
+
+def vp(request):
+    purposes = VisitingPurpose.objects.all()
+    return render(request, 'main/vp.html', {'vps': purposes})
+
+
+
+def rate_visitor(request, visitor_id):
+    visitor = get_object_or_404(Visitor, id=visitor_id)
+
+    # Check if a rating already exists for the visitor
+    existing_rating = visitor.rating_set.first()
+
+    error_messages = []  # Initialize error_messages
+
+    if existing_rating:
+        messages.warning(request, 'You have already submitted a review.You can only submit Once')
+        form = RatingForm()
+    elif request.method == 'POST':
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.visitor = visitor
+            rating.save()
+            return redirect('main:r_success') 
+        else:
+            error_messages = form.errors.values()
+            messages.error(request, 'Error submitting rating. Please check the form.')
+    else:
+        form = RatingForm()
+
+    return render(request, 'main/rate_visitor.html', {'form': form, 'visitor': visitor, 'error_messages': error_messages})
+
+
+def ro(request):
+    ro = RatingOption.objects.all()
+    return render(request, 'main/ro.html', {'ros': ro})
+
+def create_ro(request):
+    if request.method == 'POST':
+        form = RatingOptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('main:ro')  # Redirect to a success page or another URL
+    else:
+        form = RatingOptionForm()
+
+    return render(request, 'main/create_ro.html', {'form': form})
+
+def r_success(request):
+    return render(request, 'main/r_success.html')

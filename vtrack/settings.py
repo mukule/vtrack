@@ -143,8 +143,8 @@ SMS_PROVIDER_API_ENDPOINT = 'https://restapi.uwaziimobile.com/desc'
 SMS_PROVIDER_API_TOKEN = ''
 SMS_PROVIDER_SENDER_ID = 'Uwazii'
 
-CLIENT_ID = 'qzuRm3UxXShEGUm2OHyFgHzkN1vTkG3kIVGN2z9TEBQ='
-SECRET_ID = '36f74f2b-0911-47a5-a61b-20bae94dd3f1gK2G2cWfmWFsjuF5oL8+woPUyD2AbJWx24YGjRi0Jm8='
+CLIENT_ID = ''
+SECRET_ID = ''
 
 
 #Email settings
@@ -154,7 +154,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'pop.kenyaweb.com'
 EMAIL_FROM = 'nelson@kenyaweb.co.ke'
 EMAIL_HOST_USER = 'nelson@kenyaweb.co.ke'
-EMAIL_HOST_PASSWORD = '@NLS2023'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = 'nelson@kenyaweb.co.ke'

@@ -21,7 +21,6 @@
                                  <tr>
                                      <th scope="col">#</th>
                                      <th scope="col">Full Name</th>
-                                     <th scope="col">Modes</th>
                                      <th scope="col">Contacts</th>
                                      <th scope="col">Purpose</th>
                                      <th scope="col">Host</th>
@@ -29,6 +28,7 @@
                                      <th scope="col">Verrification</th>
                                      <th scope="col">Tag No.</th>
                                      <th scope="col">Status</th>
+                                     <th scope="col">Feedback</th>
                                      <th scope="col">Action</th>
                                  </tr>
                              </thead>
@@ -37,17 +37,16 @@
                                  <tr>
                                      <th scope="row">{{ forloop.counter }}</th>
                                      <td>{{ visitor.full_name }}</td>
-                                     <td>
-                                         {% if visitor.drive_in %}
-                                         <p>{{visitor.number_plate}}</p>
-                                         {%else%}
-                                         <p>Walk-In</p>
-                                         {%endif%}
-                                     </td>
+                                    
                                      <td>{{visitor.company}}<br/>{{ visitor.phone }}<br/>
-                                         {{ visitor.email }}
+                                        {{ visitor.email }} <br>
+                                        {% if visitor.drive_in %}
+                                        <p>{{visitor.number_plate}}</p>
+                                        {%else%}
+                                        <p>Walk-In</p>
+                                        {%endif%}
 
-                                     </td>
+                                    </td>
                                      <td>{{ visitor.purpose_of_visit }}</td>
                                      <td>
                                          {{ visitor.host.first_name }} {{ visitor.host.last_name }}<br/>
@@ -87,6 +86,17 @@
                                              </button>
                                          </div>
                                          {%endif%}
+                                     </td>
+                                     <td>
+                                       
+                                       {% for rating in visitor.ratings.all %}
+                                       <p class="text-primary">
+                                        {{ rating.rate.name }}
+                                        <hr>
+                                        {{ rating.comments }}
+                                       </p>
+                                       {% endfor %}
+                                     
                                      </td>
                                      <td>
                                         {% if visitor.tag.is_active %}

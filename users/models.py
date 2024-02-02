@@ -74,12 +74,13 @@ class Visitor(models.Model):
                            null=True)
     verified = models.BooleanField(default=False)
     checked_out_at = models.DateTimeField(blank=True, null=True)
+   
 
     def __str__(self):
         return self.full_name
     
 class Rating(models.Model):
-    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE)
+    visitor = models.ForeignKey(Visitor, on_delete=models.CASCADE, related_name='ratings')
     rate = models.ForeignKey(RatingOption, on_delete=models.CASCADE)
     comments = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)

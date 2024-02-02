@@ -370,11 +370,14 @@ def checkins(request):
 
 
 def v_history(request):
-    visitors = Visitor.objects.all().order_by('-created_at')
+    visitors = Visitor.objects.all().order_by('-created_at').prefetch_related('ratings')
+    feedback = Rating.objects.all()
+    print(feedback)
 
     context = {'visitors': visitors}
 
     return render(request, 'main/v_history.html', context)
+    
 
 
 

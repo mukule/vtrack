@@ -10,7 +10,33 @@
                 
                 <div class="card">
                     <div class="card-body p-4">
-                        <h1 class="mb-4 text-center">Visitors history </h1>
+                        <div class="row text-center" >
+                            <div class="row text-center mx-auto"> 
+                                <form method="GET" action="">
+                                    <div class="row row-cols-1 g-3 row-cols-lg-auto text-center d-flex justify-content-center mb-4 mt-3">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="full_name" id="input51" placeholder="Full Name">
+                                        </div>
+                                        <div class="col">
+                                            <input type="date" class="form-control" name="specific_date" id="input29">
+                                        </div>
+                                        <div class="col">
+                                            <input type="date" class="form-control" name="check_in_start_date" id="input29">
+                                        </div>
+                                        <div class="col">
+                                           -
+                                        </div>
+                                        <div class="col">
+                                            <input type="date" class="form-control" name="check_in_end_date" id="input29">
+                                        </div>
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-primary px-4">Search</button>
+                                        </div>
+                                    </div><!--end row-->
+                                </form>
+                            </div>
+                           </div>
+                        <h1 class="mb-4 text-center">{{department.name}} <span class="badge bg-primary rounded-pill">{{v_count}} Visitors</span></h1>
                       
                         <hr />
                      
@@ -29,7 +55,7 @@
                                      <th scope="col">Tag No.</th>
                                      <th scope="col">Status</th>
                                      <th scope="col">Feedback</th>
-                                     <th scope="col">Action</th>
+                                   
                                  </tr>
                              </thead>
                              <tbody>
@@ -96,18 +122,7 @@
                                        {% endfor %}
                                      
                                      </td>
-                                     <td>
-                                        {% if visitor.tag.is_active %}
-                                       <p>
-                                         <div class="col">
-                                             <a href="{% url 'main:checkout_visitor' visitor_id=visitor.id %}" class="btn btn-danger">
-                                                 Checkout
-                                             </a>
-                                             </button>
-                                         </div>
-                                       </p>
-                                     {% endif %}
-                                     </td>
+                                  
                                  </tr>
                                  {% endfor %}
                              </tbody>
@@ -122,6 +137,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
 

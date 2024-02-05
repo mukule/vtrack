@@ -19,6 +19,11 @@ from django.http import HttpResponse
 from datetime import datetime
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
+from django.db.models import Count
+from django.utils.timezone import make_aware
+
+
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def generate_otp():
@@ -76,6 +81,57 @@ def send_sms(code, phone_number):
         return f"SMS sending error: {sms_response.text}"
 
 
+def send_feedback_link(link, phone_number):
+    # Obtain Access Token
+    token_url = 'https://accounts.jambopay.com/auth/token'
+    client_id = settings.CLIENT_ID
+    client_secret = settings.SECRET_ID
+
+    token_data = {
+        'grant_type': 'client_credentials',
+        'client_id': client_id,
+        'client_secret': client_secret,
+    }
+
+    token_response = requests.post(token_url, data=token_data, headers={
+                                   'Content-Type': 'application/x-www-form-urlencoded'})
+
+    if token_response.status_code != 200:
+        print(f"Token acquisition error: {token_response.text}")
+        return f"Token acquisition error: {token_response.text}"
+
+    token = token_response.json().get('access_token')
+
+    # Send SMS
+    sms_url = 'https://swift.jambopay.co.ke/api/public/send'
+    sender_name = 'PASANDA'
+    message = f'Please provide feedback for your recent experience at CRVWWDA {link}'
+    callback_url = 'https://pasanda.com/sms/callback'
+
+    sms_data = {
+        'sender_name': sender_name,
+        'contact': phone_number,
+        'message': message,
+        'callback': callback_url,
+    }
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    sms_response = requests.post(
+        sms_url, data=json.dumps(sms_data), headers=headers)
+
+    if sms_response.status_code == 200:
+        print("SMS sent successfully")
+        return "SMS sent successfully"
+    else:
+        print(f"SMS sending error: {sms_response.text}")
+        return f"SMS sending error: {sms_response.text}"
+
+
+
 def update_unused_tags():
     # Get all tags marked as used
     used_tags = VisitorTag.objects.filter(used=True)
@@ -124,11 +180,11 @@ def dashboard(request):
             phone_number = str(visitor.phone)[-9:]
 
             visitor.save()
-            # try:
-            #     send_sms(visitor.otp, phone_number)
-            # except Exception as e:
+            try:
+                send_sms(visitor.otp, phone_number)
+            except Exception as e:
                
-            #     print(f"Failed to send SMS: {e}")
+                print(f"Failed to send SMS: {e}")
 
             return redirect('main:verify', visitor_id=visitor.id)
         else:
@@ -420,27 +476,46 @@ def checkouts(request):
 
 
 def checkout_visitor(request, visitor_id):
-    # Retrieve the visitor by ID
-    visitor = get_object_or_404(Visitor, id=visitor_id)
+    try:
+        # Retrieve the visitor by ID
+        visitor = get_object_or_404(Visitor, id=visitor_id)
 
-    # Check if the visitor has an associated tag
-    if visitor.tag:
-        # Mark the associated tag as inactive
-        visitor.tag.is_active = False
-        visitor.tag.save()
+        # Check if the visitor has an associated tag
+        if visitor.tag:
+            # Mark the associated tag as inactive
+            visitor.tag.is_active = False
+            visitor.tag.save()
 
-    # Update the checked_out_at field
-    visitor.checked_out_at = timezone.now()
-    visitor.save()
+        # Update the checked_out_at field
+        visitor.checked_out_at = timezone.now()
+        visitor.save()
 
-    # Get the feedback URL
-    feedback_url = request.build_absolute_uri(reverse('main:rate_visitor', kwargs={'visitor_id': visitor.id}))
+        # Extract the last 9 digits of the phone number
+        last_nine_digits = visitor.phone[-9:]
 
-    # Print the feedback URL to the terminal
-    print(f"Feedback URL for Visitor {visitor.id}: {feedback_url}")
+        # Get the feedback URL
+        feedback_url = request.build_absolute_uri(reverse('main:rate_visitor', kwargs={'visitor_id': visitor.id}))
 
-    # Redirect to the check-ins page or any other desired URL
-    return redirect('main:checkins')
+        # Send the feedback URL to the visitor's phone number
+        send_feedback_link(feedback_url, last_nine_digits)
+
+        # Print the feedback URL to the terminal
+        print(f"Feedback URL for Visitor {visitor.id}: {feedback_url}")
+
+        # Redirect to the check-ins page or any other desired URL
+        return redirect('main:checkins')
+
+    except ObjectDoesNotExist as e:
+        # Handle the case where the visitor with the given ID does not exist
+        print(f"Object does not exist: {e}")
+        # You might want to provide a response to the user or redirect to an error page
+        # ...
+
+    except Exception as e:
+        # Handle other exceptions that might occur during the checkout process
+        print(f"An error occurred during checkout: {e}")
+        # You might want to provide a response to the user or redirect to an error page
+        # ...
 
 
 
@@ -507,3 +582,81 @@ def create_ro(request):
 
 def r_success(request):
     return render(request, 'main/r_success.html')
+
+
+def report(request):
+    full_name_filter = request.GET.get('full_name')
+    check_in_start_date = request.GET.get('check_in_start_date')
+    check_in_end_date = request.GET.get('check_in_end_date')
+    specific_date = request.GET.get('specific_date')
+
+    visitors = Visitor.objects.all().order_by('-created_at')
+
+    if full_name_filter:
+        visitors = visitors.filter(full_name__icontains=full_name_filter)
+
+    if specific_date:
+        specific_date = make_aware(datetime.strptime(specific_date, "%Y-%m-%d"))
+        visitors = visitors.filter(created_at__date=specific_date.date())
+
+    if check_in_start_date and check_in_end_date:
+        start_date = make_aware(datetime.strptime(check_in_start_date, "%Y-%m-%d"))
+        end_date = make_aware(datetime.strptime(check_in_end_date, "%Y-%m-%d"))
+        visitors = visitors.filter(created_at__range=(start_date, end_date))
+
+    visitors_count = visitors.count()
+
+    departments = Department.objects.annotate(num_visitors=Count('staff__visitor'))
+
+    for department in departments:
+        if visitors_count > 0:
+            percentage_visitors = (department.num_visitors / visitors_count) * 100
+            department.percentage_visitors = round(percentage_visitors, 2)
+        else:
+            department.percentage_visitors = 0
+
+    context = {
+        'visitors': visitors,
+        'departments': departments,
+        'v_count': visitors_count,
+    }
+    return render(request, 'main/report.html', context)
+
+
+def department_detail(request, department_id):
+    full_name_filter = request.GET.get('full_name')
+    check_in_start_date = request.GET.get('check_in_start_date')
+    check_in_end_date = request.GET.get('check_in_end_date')
+    specific_date = request.GET.get('specific_date')
+
+   
+    department = get_object_or_404(Department, id=department_id)
+
+    visitors = Visitor.objects.filter(host__department=department).order_by('-created_at')
+
+    if full_name_filter:
+        visitors = visitors.filter(full_name__icontains=full_name_filter)
+
+    if specific_date:
+        specific_date = make_aware(datetime.strptime(specific_date, "%Y-%m-%d"))
+        visitors = visitors.filter(created_at__date=specific_date.date())
+
+    if check_in_start_date and check_in_end_date:
+        start_date = make_aware(datetime.strptime(check_in_start_date, "%Y-%m-%d"))
+        end_date = make_aware(datetime.strptime(check_in_end_date, "%Y-%m-%d"))
+        visitors = visitors.filter(created_at__range=(start_date, end_date))
+
+   
+    # num_visitors = Visitor.objects.filter(host__department=department).count()
+    num_visitors = visitors.count()
+
+  
+
+
+    context = {
+        'department': department,
+        'v_count': num_visitors,
+        'visitors': visitors,
+    }
+
+    return render(request, 'main/dep_detail.html', context)

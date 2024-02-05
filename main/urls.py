@@ -23,6 +23,8 @@ urlpatterns = [
      path('ro/', views.ro, name='ro'),
     path('create_ro/', views.create_ro, name='create_ro'),
     path('r_success/', views.r_success, name='r_success'),
+    path('report/', views.report, name='report'),
+    path('department/<int:department_id>/', views.department_detail, name='dep_detail'),
    
 
 ]
